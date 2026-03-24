@@ -131,6 +131,11 @@ public partial class ReadMeTest
                 all += $"{section}{Environment.NewLine}{Environment.NewLine}{benchmarkTable}{Environment.NewLine}";
             }
 
+            if (all.Length == 0)
+            {
+                continue;
+            }
+
             readmeLines = ReplaceReadmeLines(
                 readmeLines,
                 [all],
