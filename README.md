@@ -7,7 +7,7 @@
 [![Nuget](https://img.shields.io/nuget/v/Maple.Enums?color=purple)](https://www.nuget.org/packages/Maple.Enums/)
 [![License](https://img.shields.io/github/license/Bia10/Maple.Enums)](https://github.com/Bia10/Maple.Enums/blob/main/LICENSE)
 
-A comprehensive collection of **287 strongly-typed MapleStory V95 enumerations**, reverse-engineered from the V95 client PDB (`game_types.h`). Cross-platform, trimmable and AOT/NativeAOT compatible.
+A comprehensive collection of **287 strongly-typed MapleStory V95 enumerations**. Cross-platform, trimmable and AOT/NativeAOT compatible.
 
 [Example](#example) | [Example Catalogue](#example-catalogue) | [Public API Reference](#public-api-reference)
 
