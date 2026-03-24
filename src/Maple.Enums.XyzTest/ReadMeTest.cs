@@ -156,16 +156,17 @@ public partial class ReadMeTest
 #endif
     public void ReadMeTest_PublicApi()
     {
-        if (!File.Exists(s_readmeFilePath))
+        var publicApiFilePath = Path.Combine(s_rootDirectory, "docs", "PublicApi.md");
+        if (!File.Exists(publicApiFilePath))
         {
             return;
         }
 
         var publicApi = typeof(EnumDisplayExtensions).Assembly.GeneratePublicApi();
-        var readmeLines = File.ReadAllLines(s_readmeFilePath);
-        readmeLines = ReplaceReadmeLines(readmeLines, [publicApi], "## Public API Reference", "```csharp", 1, "```", 0);
-        var newReadme = string.Join(Environment.NewLine, readmeLines) + Environment.NewLine;
-        File.WriteAllText(s_readmeFilePath, newReadme, System.Text.Encoding.UTF8);
+        var apiLines = File.ReadAllLines(publicApiFilePath);
+        apiLines = ReplaceReadmeLines(apiLines, [publicApi], "## Public API Reference", "```csharp", 1, "```", 0);
+        var newContent = string.Join(Environment.NewLine, apiLines) + Environment.NewLine;
+        File.WriteAllText(publicApiFilePath, newContent, System.Text.Encoding.UTF8);
     }
 
     // ─────────────────────────────────────────────────────────────
