@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Maple.Enums</RootNamespace>
+    <IsPackable>true</IsPackable>
+
+    <!-- AOT/Trimming: ENFORCE from day one. -->
+    <IsTrimmable>true</IsTrimmable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableAOTAnalyzer>true</EnableAOTAnalyzer>
+
+    <Description>MapleStory V95 game enumerations: job, item slots, element types, portal types, mob categories, quest states, and all other domain enums. Cross-platform, trimmable and AOT/NativeAOT compatible.</Description>
+
+    <!-- NuGet metadata -->
+    <PackageId>Maple.Enums</PackageId>
+    <PackageTags>maplestory;enums;v95;game;maple;dotnet;performance</PackageTags>
+    <PackageIcon>Icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/Bia10/Maple.Enums/</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Bia10/Maple.Enums/releases</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+
+    <!-- Source Link -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryUrl>https://github.com/Bia10/Maple.Enums/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Deterministic on CI -->
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <ContinuousIntegrationBuild Condition="'$(TF_BUILD)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!-- Pack icon, README, and reference docs into NuGet package -->
+  <ItemGroup>
+    <None Include="../../Icon.png" Pack="true" PackagePath="\" />
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+    <None Include="REFERENCE.md" Pack="true" PackagePath="\" />
+    <None Include="../../CHANGELOG.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- Library dependencies -->
+  <ItemGroup>
+    <PackageReference Include="FastEnum.Core" />
+    <PackageReference Include="FastEnum.Generators">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- InternalsVisibleTo: allow test/benchmark projects to access internal APIs -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).Test</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).XyzTest</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).Benchmarks</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).ComparisonBenchmarks</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>
