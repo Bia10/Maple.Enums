@@ -56,14 +56,22 @@ jobs:
         run: dotnet build -c ${{ matrix.configuration }} --no-restore
 
       - name: Test
+        if: matrix.configuration == 'Debug'
         run: |
-          dotnet run --project src/Maple.Enums.Test/Maple.Enums.Test.csproj -c ${{ matrix.configuration }} --no-build
-          dotnet run --project src/Maple.Enums.XyzTest/Maple.Enums.XyzTest.csproj -c ${{ matrix.configuration }} --no-build
+          dotnet run --project src/Maple.Enums.Test/Maple.Enums.Test.csproj -c Debug --no-build
+          dotnet run --project src/Maple.Enums.XyzTest/Maple.Enums.XyzTest.csproj -c Debug --no-build
+
+      - name: Test with coverage
+        if: matrix.configuration == 'Release'
+        run: |
+          dotnet run --project src/Maple.Enums.Test/Maple.Enums.Test.csproj -c Release --no-build -- --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
+          dotnet run --project src/Maple.Enums.XyzTest/Maple.Enums.XyzTest.csproj -c Release --no-build -- --coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml
 
       - name: Upload coverage to Codecov
-        if: matrix.configuration == 'Release' # Upload only once per OS to avoid duplicate reports
+        if: matrix.configuration == 'Release'
         uses: codecov/codecov-action@1af58845a975a7985b0beb0cbe6fbbb71a41dbad # v5.5.3
         with:
+          files: artifacts/**/TestResults/**/coverage.cobertura.xml
           flags: ${{ matrix.os }}
           token: ${{ secrets.CODECOV_TOKEN }}
 
