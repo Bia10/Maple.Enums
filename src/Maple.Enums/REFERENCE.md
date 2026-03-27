@@ -7,11 +7,11 @@ its original naming convention, and approximate source location.
 
 ## Quick stats
 
-- **287** enums total (+1: ShopCashType added after server comparison)
+- **292** enums total
 - **248** enums confirmed via V95 PDB
-- **12** enums with partial V95 references
-- **27** enums from alternative sources (WZ data, protocol analysis, EdelsteinExperimental)
-  - 8 WZ-data sourced (GuildGrade, ItemAttackSpeed, ItemEnchantCategory, QuestArea, ReactorEventType, ReactorLayer, SkillSubType, SkinColor)
+- **13** enums with partial V95 references
+- **29** enums from alternative sources (WZ data, protocol analysis, EdelsteinExperimental)
+  - 9 WZ-data sourced (GuildGrade, ItemAttackSpeed, ItemEnchantCategory, LifeType, QuestArea, ReactorEventType, ReactorLayer, SkillSubType, SkinColor)
 
 ## Folder structure
 
@@ -54,8 +54,9 @@ Enum name and/or values reconstructed from indirect PDB evidence (field types,
 WZ data corroborated against PDB structs, or adjacent symbols).  Values are correct
 but the original C++ enum might not have been a named type.
 
-`BackgroundType`, `ContiMoveState`, `FieldEffectType`, `Job`,
-`MobTemporaryStatType`, `QuestJobExFlags`, `SkillId`, `TemporaryStatType`
+`AccountGradeCode`, `BackgroundType`, `ContiMoveState`,
+`FieldEffectType`, `Job`, `MobTemporaryStatType`, `QuestJobExFlags`, `SkillId`,
+`TemporaryStatType`
 
 ### WZ_DATA — sourced from WZ content files (5 enums)
 
@@ -67,6 +68,7 @@ read at runtime.  A server implementation defines these based on WZ data, not th
 | `GuildGrade` | `Etc.wz/GuildSkill.img` |
 | `ItemAttackSpeed` | `Character.wz` equip/`info/attackSpeed` |
 | `ItemEnchantCategory` | equip item `info/enchantCategory` |
+| `LifeType` | `Map.wz/{mapId}/life/{id}/type` |
 | `QuestArea` | Quest WZ area IDs |
 | `ReactorEventType` | `Reactor.wz/{id}/{state}/{event}/type` |
 | `ReactorLayer` | `Reactor.wz/{id}/info/layer` |
@@ -127,6 +129,7 @@ definitions.  All four remain correctly classified as non-PDB.
 | `AdminShopCommodityState` | Confirmed | anonymous | `AdminShopCommodity_*` | line ~17010 | — |
 | `AdminShopOperation` | Confirmed | anonymous | `AdminShopReq_*/AdminShopRes_*` | line ~9435 | — |
 | `AdminShopTradeResult` | Confirmed | anonymous | `AdminShopTradeFail_*` | line ~17000 | — |
+| `AccountGradeCode` | V95 ref | — [Flags] | — | game_pseudocode.c | Byte bitmask: AdminLevel1=0x01, AdminLevel2=0x02, AdminLevel3=0x04, AdminLevel4=0x08, AdminLevel5=0x10, AdminLevel10=0x20; no named PDB enum; bits confirmed via IsAdminAccount/IsTradeBlockedUser/GetAdminLevel checks |
 | `AffectedAreaType` | No PDB | — | — | — | — |
 | `AnimationLayerType` | Confirmed | anonymous | `AL_*` | line ~8081 | — |
 | `AntiMacroOperation` | Confirmed | anonymous | `AntiMacroReq_*/AntiMacroRes_*` | line ~5390 | — |
@@ -244,11 +247,13 @@ definitions.  All four remain correctly classified as non-PDB.
 | `LayerBlendType` | Confirmed | — | `LB_*` | game_types.h | — |
 | `LeaveResult` | Confirmed | anonymous | `LR_*` | line ~16650 | — |
 | `LifeNameTagType` | Confirmed | anonymous | `LIFE_NAMETAG_*` | line ~8053 | — |
+| `LifeType` | WZ data | — | — | Map.wz life/{id}/type | WZ string "m" = Mob (0), "n" = Npc (1) |
 | `LocaleId` | Confirmed | — | `kLocaleID_*` | game_types.h | — |
 | `LoginResult` | No PDB | — | — | — | Source: EdelsteinExperimental |
 | `LoginState` | Confirmed | unnamed | `LS_*` | line ~6280 | — |
 | `MacroTargetType` | Confirmed | — | `TAEGETTYPE_*` | game_types.h | — |
 | `MakeoverItemType` | Confirmed | anonymous | `MKT_*` | line ~6825 | — |
+| `MapBoatType` | WZ data | — | — | CShip.m_nShipKind; WZ ship/shipKind | None=0 (field absent), Regular=1, Premium=2 |
 | `MapFieldLimit` | Confirmed | named: `FIELDOPT` | — | line 3399 | CField::m_dwOption; Max flag 0x800000 |
 | `MapFieldType` | Confirmed | — | — | line 3692 | Also: game_pseudocode.c:276050 |
 | `MapleTvResultCode` | Confirmed | anonymous | `MapleTVResCode_*` | line ~15970 | — |
@@ -427,7 +432,8 @@ Where the server uses a different name for the same concept:
 | `CommodityFlags` | `CommodityModifyFlag` | Same bit layout |
 | `ShopRequestOperations` + `ShopResultOperations` | `CashItemOperation` | Unified into one enum with `Req`/`Res` prefix on members |
 | `LoginState` (server) | `LoginState` (client) | **Different concepts** — server models session phase (`CheckPassword`, `SelectWorld`); client models UI view (`Title`, `WorldSelect`). Not equivalent. |
-| `AccountGradeCode` [Flags] | `AdminLevel` (sequential) | **Values differ** — server interprets admin level as a bitmask (1,2,4,8,16,32); client PDB uses sequential index (0,1,2,3,4,5). Client PDB is authoritative. |
+| `AccountGradeCode` [Flags] | `AccountGradeCode` | **Now added** — byte bitmask where each bit enables an admin tier (AdminLevel1=0x01 through AdminLevel10=0x20). Previously described as conceptually equivalent to sequential `AdminLevel`; the bitmask representation is now a proper separate type. |
+| `AccountSubGradeCode` | `PrivateStatusFlag` | **Existing type** — `PrivateStatusIDFlag` (PDB, line ~1691, `PS_*` prefix) already exists as `PrivateStatusFlag`. The consuming project should reference `PrivateStatusFlag` directly. The `AccountInfoResult` packet reads 2 bytes (`Decode2`): lower byte = `PrivateStatusFlag` flags, bit 8 = `TesterAccount` (also in `m_bTesterAccount`). |
 
 ### New enum added
 
@@ -554,6 +560,19 @@ server-inferred enums.
 
 - V95: SecondaryStat UINT128 bitmask — each member is the bit position, not the flag value
 - Actual flag: (UInt128)1 &lt;&lt; (int)statType
+
+### `AccountGradeCode`
+
+- Byte bitmask in `CWvsContext.m_nGradeCode` (V95 storage: `TSecType<unsigned char>`). No named enum in the V95 PDB.
+- Read from `CLogin::OnAccountInfoResult` packet via `Decode1` (1 byte).
+- Bit positions reconstructed from `game_pseudocode.c`; cross-referenced with the server implementation:
+  - `0x01` (`AdminLevel1`): checked by `IsAdminAccount`, `IsUnderCover`, `CanUseCommonCommand`, `CannotUseCommunityFunction`
+  - `0x02` (`AdminLevel2`): no independent named check found; inferred from `GetAdminLevel` sequential bit-scan order
+  - `0x04` (`AdminLevel3`): same as AdminLevel2 note
+  - `0x08` (`AdminLevel4`): same as AdminLevel2 note
+  - `0x10` (`AdminLevel5`): checked by `IsTradeBlockedUser` and `CannotDropItem`
+  - `0x20` (`AdminLevel10`): checked by `GetAdminLevel`; when set, `GetAdminLevel` returns 0, overriding all lower tier bits
+- `ADMIN_LEVEL_0..10` (game_types.h line ~1706) is the sequential *output* of `GetAdminLevel`, not the stored bitmask — mapped as `AdminLevel`.
 
 ### `WeaponType`
 
