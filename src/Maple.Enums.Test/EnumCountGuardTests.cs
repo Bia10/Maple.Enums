@@ -11,8 +11,8 @@ public sealed class EnumCountGuardTests
     {
         var enumCount = typeof(EnumDisplayExtensions).Assembly.GetExportedTypes().Count(t => t.IsEnum);
 
-        // 286 enum types as of the initial release.
+        // 290 enum types as of the initial release.
         // Update this constant when intentionally adding or removing enums.
-        await Assert.That(enumCount).IsEqualTo(286);
+        await Assert.That(enumCount).IsEqualTo(290);
     }
 }
