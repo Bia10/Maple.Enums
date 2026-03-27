@@ -1,4 +1,4 @@
-namespace Maple.Enums.Test;
+﻿namespace Maple.Enums.Test;
 
 /// <summary>
 /// Guard test that catches accidental addition or removal of public enum types.
