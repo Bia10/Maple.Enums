@@ -7,13 +7,13 @@
 [![Nuget](https://img.shields.io/nuget/v/Maple.Enums?color=purple)](https://www.nuget.org/packages/Maple.Enums/)
 [![License](https://img.shields.io/github/license/Bia10/Maple.Enums)](https://github.com/Bia10/Maple.Enums/blob/main/LICENSE)
 
-A comprehensive collection of **292 strongly-typed MapleStory V95 enumerations**. Cross-platform, trimmable and AOT/NativeAOT compatible.
+A comprehensive collection of **293 strongly-typed MapleStory V95 enumerations**. Cross-platform, trimmable and AOT/NativeAOT compatible.
 
 [Example](#example) | [Example Catalogue](#example-catalogue) | [Public API Reference](docs/PublicApi.md)
 
 ## Features
 
-- **292 enums** covering jobs, stats, items, combat, fields, mobs, quests, network opcodes, and more
+- **293 enums** covering jobs, stats, items, combat, fields, mobs, quests, network opcodes, and more
 - **AOT-compatible** — `.NET 10`, `IsAotCompatible=true`, zero runtime reflection
 - **Source-generated** via [FastEnum.Generators](https://github.com/xin9le/FastEnum) — no `Enum.GetValues` overhead
 - **Triple-indexed labels** on every member:

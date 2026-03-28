@@ -1,11 +1,12 @@
-using FastEnumUtility;
+﻿using FastEnumUtility;
 
 namespace Maple.Enums;
 
 /// <summary>
-/// Login screen state.
+/// Login screen step stored in CLogin::m_nLoginStep.
+/// NOTE: Not seen as enum, but sentinel values in CLogin.
 /// </summary>
-public enum LoginState : byte
+public enum LoginStep : byte
 {
     /// <summary>Title/splash screen.</summary>
     [Label("LS_TITLE")]

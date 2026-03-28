@@ -7,7 +7,7 @@ its original naming convention, and approximate source location.
 
 ## Quick stats
 
-- **292** enums total
+- **293** enums total
 - **248** enums confirmed via V95 PDB
 - **13** enums with partial V95 references
 - **29** enums from alternative sources (WZ data, protocol analysis, EdelsteinExperimental)
@@ -144,6 +144,7 @@ definitions.  All four remain correctly classified as non-PDB.
 | `BackgroundType` | V95 ref | — | — | — | — |
 | `BattlefieldTeam` | Confirmed | anonymous | `BATTLEFIELD_TEAM_*` | line ~3391 | — |
 | `BodyChangeType` | Confirmed | anonymous | `CHANGEBODY_*` | line ~8023 | — |
+| `BodyPart` | Confirmed | anonymous | `BP_*/DP_*/MP_*` | line ~1351 | PDB type hash `$F9CF2827FA75A6B5E06DC78724C76348`; sentinels BP_COUNT/BP_EXT_END/BP_EXT_COUNT/BP_EXCOUNT/DP_BASE/DP_END/DP_COUNT/MP_BASE/MP_END/MP_COUNT excluded; BP_EXT_PENDANT1=BP_EXT_0 alias (both 0x3B); MP_TRANSISTER is PDB typo for Transistor |
 | `BossMobId` | Confirmed | — | — | line ~12673 | — |
 | `BridleFailReason` | Confirmed | anonymous | `BRIDLE_FAIL_*` | line ~6767 | — |
 | `BroadcastMessageType` | Confirmed | anonymous | `BM_*` | line ~5730 | — |
@@ -560,6 +561,15 @@ server-inferred enums.
 
 - V95: SecondaryStat UINT128 bitmask — each member is the bit position, not the flag value
 - Actual flag: (UInt128)1 &lt;&lt; (int)statType
+
+### `BodyPart`
+
+- Character equipment body part slot index (V95 PDB confirmed — anonymous enum with hash name `$F9CF2827FA75A6B5E06DC78724C76348`, game_types.h line ~1351).
+- Prefix groups: `BP_*` (standard slots 0–65, 100), `DP_*` (dragon equipment 1000–1003), `MP_*` (mechanic equipment 1100–1104).
+- PDB typo: `MP_TRANSISTER` (not `TRANSISTOR`) — preserved verbatim as label index 0; display name at index 1 uses correct spelling.
+- `BP_EXT_PENDANT1 = 0x3B` is an alias for `BP_EXT_0 = 0x3B`; only `Ext0` is exposed — the alias is documented in its XML summary.
+- Excluded sentinels/counts: `BP_COUNT=0x3B`, `BP_EXT_END=0x3B`, `BP_EXT_COUNT=0x1`, `BP_EXCOUNT=0x3C`, `DP_BASE=0x3E8` (alias of `DP_CAP`), `DP_END=0x3EC`, `DP_COUNT=0x4`, `MP_BASE=0x44C` (alias of `MP_ENGINE`), `MP_END=0x451`, `MP_COUNT=0x5`.
+- Corrections vs agent-provided draft: `EyeAcc=3`/`EarAcc=4` order fixed (PDB: `BP_EYEACC=0x3`, `BP_EARACC=0x4`); member at value 25 renamed from `PetAbilMechanicConsume` to `PetAbilMpConsume` (PDB: `BP_PETABIL_MPCONSUME`).
 
 ### `AccountGradeCode`
 
