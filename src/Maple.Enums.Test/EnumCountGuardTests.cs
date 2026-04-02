@@ -11,9 +11,9 @@ public sealed class EnumCountGuardTests
     {
         var enumCount = typeof(EnumDisplayExtensions).Assembly.GetExportedTypes().Count(t => t.IsEnum);
 
-        // 293 enum types: 290 from initial release + AccountGradeCode, LifeType, BodyPart.
+        // 294 enum types: 290 from initial release + AccountGradeCode, LifeType, BodyPart, Emotion.
         // AccountSubGradeCode was removed — it is a duplicate of the existing PrivateStatusFlag.
         // Update this constant when intentionally adding or removing enums.
-        await Assert.That(enumCount).IsEqualTo(293);
+        await Assert.That(enumCount).IsEqualTo(294);
     }
 }
