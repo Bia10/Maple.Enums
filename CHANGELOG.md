@@ -6,6 +6,12 @@ This project uses [MinVer](https://github.com/adamralph/minver) for semantic ver
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-04-02
+
+### Added
+
+- `Emotion` — emotion IDs sent in `CP_SendEmotionChange` (opcode 56; V95 RE `EMT_*` anonymous enum, `game_pseudocode.c`): `Default` (0) through `Stunned` (7). Label index 2 carries the matching Character.wz face-expression node name (e.g. `"smile"`, `"cry"`). Migrated from `CharacterCodes.EmotionId` in `Maple.WzSchema`, where it was a static class of `uint` constants.
+
 ## [0.4.0] - 2026-03-28
 
 ### Added

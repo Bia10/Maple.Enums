@@ -7,9 +7,9 @@ its original naming convention, and approximate source location.
 
 ## Quick stats
 
-- **293** enums total
+- **294** enums total
 - **248** enums confirmed via V95 PDB
-- **13** enums with partial V95 references
+- **14** enums with partial V95 references
 - **29** enums from alternative sources (WZ data, protocol analysis, EdelsteinExperimental)
   - 9 WZ-data sourced (GuildGrade, ItemAttackSpeed, ItemEnchantCategory, LifeType, QuestArea, ReactorEventType, ReactorLayer, SkillSubType, SkinColor)
 
@@ -54,7 +54,7 @@ Enum name and/or values reconstructed from indirect PDB evidence (field types,
 WZ data corroborated against PDB structs, or adjacent symbols).  Values are correct
 but the original C++ enum might not have been a named type.
 
-`AccountGradeCode`, `BackgroundType`, `ContiMoveState`,
+`AccountGradeCode`, `BackgroundType`, `ContiMoveState`, `Emotion`,
 `FieldEffectType`, `Job`, `MobTemporaryStatType`, `QuestJobExFlags`, `SkillId`,
 `TemporaryStatType`
 
